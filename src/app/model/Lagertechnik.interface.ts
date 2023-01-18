@@ -1,7 +1,12 @@
 export interface Lagertechnik {
   name: string;
   //Kleinteillager oder Palettenlager Klt= false, Plt = true
-  lagerart: boolean;
+  lagerart: 'Klt' | 'Plt';
+  kommisionierStrategie?:
+    | 'Picklist'
+    | 'MDE'
+    | 'Pick by Voice'
+    | 'Pick by Light';
   automatisierung: boolean;
   eignungKommissionierung: boolean;
   fifo: boolean;
