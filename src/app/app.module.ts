@@ -5,9 +5,11 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatListModule } from '@angular/material/list';
+import { EbaComponent } from './eba/eba.component';
+import { PairwiseRankingComponent } from './pairwise-ranking/pairwise-ranking.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, EbaComponent, PairwiseRankingComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

@@ -1,0 +1,20 @@
+<h1 class="text-xl text-center">
+  Welche der folgenden Kritierien ist im vergleich Wichtiger
+</h1>
+<div class="select-none m-10 flex justify-evenly w-full">
+  <div
+    class="h-10 rounded-lg bg-sky-500 hover:bg-sky-700 cursor-pointer text-white p-2"
+    (click)="criteriaClicked(leftIndex)"
+  >
+    {{ criteria[leftIndex].name | uppercase }}
+  </div>
+  <div
+    class="h-10 rounded-lg bg-sky-500 hover:bg-sky-700 cursor-pointer text-white p-2"
+    (click)="criteriaClicked(rightIndex)"
+  >
+    {{ criteria[rightIndex].name | uppercase }}
+  </div>
+</div>
+<p class="block text-center" *ngFor="let val of scoreMap | keyvalue">
+  {{ val.key }}: {{ val.value }}
+</p>

@@ -1,0 +1,81 @@
+<div class="select-none flex justify-center items-center flex-col">
+  <div
+    class="flex flex-col items-center gap-32 bg-slate-300 w-1/2 p-3 rounded-md"
+  >
+    <div
+      class="flex flex-col justify-center items-center w-full"
+      *ngIf="
+        alternatives.length > 1 &&
+        questIndex < elimintaionByAspectQuestions.length
+      "
+    >
+      <span class="text-sm"> Alternativen:</span>
+      <span class="rounded-full border border-black p-2 h-10 w-10 text-center">
+        {{ alternatives.length }}</span
+      >
+      <span class="text-lg font-semibold mt-3">
+        {{ elimintaionByAspectQuestions[questIndex].frage }}
+      </span>
+    </div>
+    <div
+      class="flex flex-row justify-evenly w-full"
+      *ngIf="
+        alternatives.length > 1 &&
+        questIndex < elimintaionByAspectQuestions.length
+      "
+    >
+      <div
+        *ngFor="let answ of elimintaionByAspectQuestions[questIndex].antworten"
+        (click)="selectAnswer(answ)"
+      >
+        <span
+          class="cursor-pointer border border-black rounded-lg p-3"
+          [ngClass]="{ selected: currentAnswer.name === answ.name }"
+        >
+          {{ answ.name }}</span
+        >
+      </div>
+    </div>
+    <div *ngIf="alternatives.length == 0">
+      Keine Alternativen mehr in der Auswahl!
+    </div>
+    <div *ngIf="alternatives.length == 1">
+      Die gesuchte Alternative ist {{ alternatives[0].lagertechnik.name }}
+    </div>
+    <div *ngIf="questIndex >= elimintaionByAspectQuestions.length">
+      Die gesuchten Alternativen sind
+      <p *ngFor="let alt of alternatives">{{ alt.lagertechnik.name }}</p>
+      <button
+        *ngIf="alternatives.length > 0"
+        class="shadow-md rounded-xl border border-black w-fit p-3 bg-teal-400 shadow-black"
+        (click)="next()"
+      >
+        Weiter
+      </button>
+    </div>
+    <div
+      class="flex flex-row justify-evenly w-full"
+      *ngIf="questIndex < elimintaionByAspectQuestions.length"
+    >
+      <button
+        *ngIf="questIndex > 0"
+        class="shadow-md rounded-xl border border-black w-fit p-3 shadow-black bg-red-400"
+        (click)="back()"
+      >
+        Zurück
+      </button>
+      <button
+        *ngIf="alternatives.length > 0"
+        class="shadow-md rounded-xl border border-black w-fit p-3 bg-teal-400 shadow-black"
+        (click)="
+          questionAnswered(
+            elimintaionByAspectQuestions[questIndex],
+            currentAnswer.scale
+          )
+        "
+      >
+        Nächste Frage
+      </button>
+    </div>
+  </div>
+</div>

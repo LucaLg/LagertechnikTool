@@ -19,6 +19,15 @@ export interface Lagertechnik {
 
   //Kühllager Skala Nicht geeignet - Gut transfer zu nicht Geeignet= 0 - ,Schlecht =1 ,Mittel =2 ,Gut=3
   kühllagerEignung: 0 | 1 | 2 | 3;
+  // Skala Wenig Mittel Sehr Gut => 1,2,3
+  hochArtikelanzahl: 1 | 2 | 3;
+  mittelArtikelanzahl: 1 | 2 | 3;
+  geringArtikelanzahl: 1 | 2 | 3;
+  hochbestandsmenge: 1 | 2 | 3;
+  mittelBestandsmenge: 1 | 2 | 3;
+  geringBestandsmenge: 1 | 2 | 3;
+
+  //PerfomanceSkalen
 
   //positivSkalen großer = besser Gering Mittel Hoch Sehr Hoch => 1,2,3,4
   kommissionierLeistung: 1 | 2 | 3 | 4;
@@ -35,12 +44,4 @@ export interface Lagertechnik {
   investitionskosten: 1 | 2 | 3 | 4;
   fehlerquote: 1 | 2 | 3 | 4;
   personalbedarf: 1 | 2 | 3 | 4;
-  // Skala Wenig Mittel Sehr Gut => 1,2,3
-
-  hochArtikelanzahl: 1 | 2 | 3;
-  mittelArtikelanzahl: 1 | 2 | 3;
-  geringArtikelanzahl: 1 | 2 | 3;
-  hochbestandsmenge: 1 | 2 | 3;
-  mittelBestandsmenge: 1 | 2 | 3;
-  geringBestandsmenge: 1 | 2 | 3;
 }
