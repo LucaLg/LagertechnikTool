@@ -41,11 +41,33 @@ export class EbaComponent {
       ],
     },
     {
+      prop: 'investitionskosten',
+      frage: 'Wie hoch können die maximalen Investitionskosten ausfallen?',
+      antworten: [
+        { name: 'Gering', scale: 1 },
+        { name: 'Mittel', scale: 2 },
+        { name: 'Hoch', scale: 3 },
+        { name: 'Sehr Hoch', scale: 4 },
+        { name: 'Überspringen', scale: -1 },
+      ],
+    },
+    {
       prop: 'eignungKommissionierung',
       frage: 'Soll kommissioniert werden?',
       antworten: [
         { name: 'Ja', scale: true },
         { name: 'Nein', scale: false },
+        { name: 'Überspringen', scale: -1 },
+      ],
+    },
+    {
+      prop: 'kommissionierLeistung',
+      frage: 'Welche Pickleistung benötigen wird benötigt ?',
+      antworten: [
+        { name: 'Gering', scale: 1 },
+        { name: 'Mittel', scale: 2 },
+        { name: 'Hoch', scale: 3 },
+        { name: 'Sehr hoch', scale: 4 },
         { name: 'Überspringen', scale: -1 },
       ],
     },
@@ -85,7 +107,8 @@ export class EbaComponent {
     },
     {
       prop: 'schutz',
-      frage: 'Soll das Lager von sich aus geschütz sein?',
+      frage:
+        'Soll die Lagertechnik einen integerierten Schutz (für bspw. Gefahrenstoffe etc.) besitzen?',
       antworten: [
         { name: 'Ja', scale: true },
         { name: 'Nein', scale: false },
@@ -123,11 +146,11 @@ export class EbaComponent {
     },
     {
       prop: 'kühllagerEignung',
-      frage: 'Wenn ja wie start soll die Eignung zum Kühllager sein?',
+      frage: 'Besteht eine mindestanforderung an die Eignung zum Kühllager?',
       antworten: [
-        { name: 'Schlecht ', scale: 1 },
-        { name: 'Mittel', scale: 2 },
-        { name: 'Gut', scale: 3 },
+        { name: 'Schlecht geeignet ', scale: 1 },
+        { name: 'Mittel geeignet', scale: 2 },
+        { name: 'Gut geeignet', scale: 3 },
         { name: 'Überspringen', scale: -1 },
       ],
     },
@@ -180,6 +203,7 @@ export class EbaComponent {
   }
 
   questionAnswered(question: EbAQuestion, answer: string | boolean | number) {
+    console.log(question, answer);
     let newAlts: { name: string; lagertechnik: Lagertechnik }[] = [];
     if (answer === -1) {
       this.currentAnswer = { name: '', scale: '' };
@@ -188,16 +212,25 @@ export class EbaComponent {
       this.questIndex++;
       return;
     }
+    if (question.prop === 'investitionskosten') {
+      this.handleInvestitionskosten(newAlts, answer);
+      return;
+    }
     if (question.prop === 'eignungKommissionierung') {
       this.handleKommissionierung(newAlts, answer);
       return;
     }
-
+    if (question.prop === 'kommissionierLeistung') {
+      console.log('Check kommissionierLeistung');
+      newAlts = this.handleKommissionierleistung(newAlts, answer);
+      return;
+    }
     if (question.prop === 'maxGewicht') {
       newAlts = this.handleMaxGewicht(answer);
 
       return;
     }
+
     if (question.prop === 'maxHöhe') {
       newAlts = this.handleMaxHohe(answer);
 
@@ -293,10 +326,54 @@ export class EbaComponent {
     this.currentAnswer = { name: '', scale: '' };
     this.lastIndex = this.questIndex;
     if (!this.dataService.kommissionierung) {
-      this.questIndex += 5;
+      this.questIndex += 6;
     } else {
       this.questIndex++;
     }
+  }
+  handleKommissionierleistung(
+    newAlts: { name: string; lagertechnik: Lagertechnik }[],
+    answer: string | boolean | number
+  ) {
+    if (answer === 1) {
+      newAlts = this.alternatives;
+    } else {
+      newAlts = this.alternatives.filter(
+        (alt) => alt.lagertechnik.kommissionierLeistung >= answer
+      );
+
+      console.log(newAlts);
+    }
+    console.log('Halllloooooo');
+    console.log(newAlts);
+    this.currentAnswer = { name: '', scale: '' };
+    this.oldAlternatives.push(this.alternatives);
+    this.alternatives = newAlts;
+    this.lastIndex = this.questIndex;
+    this.questIndex++;
+    return newAlts;
+  }
+  handleInvestitionskosten(
+    newAlts: { name: string; lagertechnik: Lagertechnik }[],
+    answer: string | boolean | number
+  ) {
+    if (answer === 4) {
+      newAlts = this.alternatives;
+    } else {
+      newAlts = this.alternatives.filter(
+        (alt) => alt.lagertechnik.investitionskosten <= answer
+      );
+
+      console.log(newAlts);
+    }
+    console.log('Halllloooooo');
+    console.log(newAlts);
+    this.currentAnswer = { name: '', scale: '' };
+    this.oldAlternatives.push(this.alternatives);
+    this.alternatives = newAlts;
+    this.lastIndex = this.questIndex;
+    this.questIndex++;
+    return newAlts;
   }
   handleMaxGewicht(answer: string | boolean | number) {
     let newAlts: { name: string; lagertechnik: Lagertechnik }[] = [];
@@ -419,11 +496,15 @@ export class EbaComponent {
   }
 
   back() {
+    console.log(this.oldAlternatives);
     if (this.questIndex >= 1) {
       this.questIndex = this.lastIndex;
       this.lastIndex = this.questIndex - 1;
-      this.alternatives = this.oldAlternatives[this.oldAlternatives.length - 1];
-      this.oldAlternatives.slice(this.oldAlternatives.length - 1, 1);
+      this.alternatives = this.oldAlternatives[this.questIndex];
+      this.oldAlternatives.slice(this.questIndex, 1);
+    }
+    if (this.questIndex === 0) {
+      this.oldAlternatives = [];
     }
   }
 

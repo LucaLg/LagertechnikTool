@@ -1,13 +1,4 @@
-<app-eba
-  (alternativen)="setCurrentAlternatives($event)"
-  *ngIf="!altsSet"
-></app-eba>
-<app-pairwise-ranking
-  *ngIf="altsSet"
-  (ranked)="setScores()"
-  [alternativen]="currentAlternatives"
-></app-pairwise-ranking>
-<div class="flex items-center flex-col mt-12 gap-5">
+<div class="flex items-center flex-col mt-12 gap-5 w-full">
   <!--  <h2 class="text-2xl font-medium">
     Folgende Lagertechniken werden miteinander verglichen:
   </h2>
@@ -34,7 +25,15 @@
   <button class="shadow-sm bg-green-500 rounded-lg p-3" (click)="rank()">
     Rank
   </button> -->
-
+  <app-eba
+    (alternativen)="setCurrentAlternatives($event)"
+    *ngIf="!altsSet"
+  ></app-eba>
+  <app-pairwise-ranking
+    *ngIf="altsSet"
+    (ranked)="setScores()"
+    [alternativen]="currentAlternatives"
+  ></app-pairwise-ranking>
   <div class="" *ngIf="ranked">
     <h2 class="text-lg font-medium">
       Die Alternative mit dem niedrigsten Score wird präferiert

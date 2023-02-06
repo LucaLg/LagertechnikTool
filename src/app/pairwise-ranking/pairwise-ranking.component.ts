@@ -28,10 +28,11 @@ export class PairwiseRankingComponent {
     }
     console.log(this.criteria);
   }
-  criteriaClicked(index: number) {
-    const oldScore = this.scoreMap.get(this.criteria[index].name)!;
-    this.scoreMap.set(this.criteria[index].name, oldScore + 1);
-
+  criteriaClicked(index: number, equal: boolean) {
+    if (!equal) {
+      const oldScore = this.scoreMap.get(this.criteria[index].name)!;
+      this.scoreMap.set(this.criteria[index].name, oldScore + 1);
+    }
     if (this.rightIndex < this.criteria.length - 1) {
       this.rightIndex++;
     } else {
@@ -56,7 +57,14 @@ export class PairwiseRankingComponent {
       }
     }
   }
-
+  equal(leftIndex: number, rightIndex: number) {
+    const oldScoreLeft = this.scoreMap.get(this.criteria[leftIndex].name)!;
+    this.scoreMap.set(this.criteria[leftIndex].name, oldScoreLeft + 0.5);
+    const oldScoreRight = this.scoreMap.get(this.criteria[rightIndex].name)!;
+    this.scoreMap.set(this.criteria[rightIndex].name, oldScoreRight + 0.5);
+    console.log(this.scoreMap);
+    this.criteriaClicked(leftIndex, true);
+  }
   finished() {
     this.dataSerivce.rankingMap = this.scoreMap;
     this.ranked.next(true);

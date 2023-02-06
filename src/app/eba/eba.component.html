@@ -1,4 +1,4 @@
-<div class="select-none flex justify-center items-center flex-col">
+<div class="select-none flex justify-center items-center flex-col w-screen">
   <div
     class="flex flex-col items-center gap-32 bg-slate-300 w-1/2 p-3 rounded-md"
   >
@@ -66,6 +66,7 @@
       </button>
       <button
         *ngIf="alternatives.length > 0"
+        [disabled]="currentAnswer.name === ''"
         class="shadow-md rounded-xl border border-black w-fit p-3 bg-teal-400 shadow-black"
         (click)="
           questionAnswered(
